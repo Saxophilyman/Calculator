@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -27,6 +28,7 @@ public class Calculator {
             checkReadConsoleIsNumber(readConsole);
             m(firstArgument.toString());
             m(secondArgument.toString());
+            startCalculations();
             startWorkingCalculator();
         }
     }
@@ -55,6 +57,7 @@ public class Calculator {
     private static void checkReadConsoleIsNumber(String readConsoleText) {
         String textSymbol;
         //убрать пробелы в строке
+        //вариант через replace " " на ""
         for (int index = 0; index < readConsoleText.length(); index++) {
             textSymbol = String.valueOf(readConsoleText.charAt(index));
             //m(textSymbol);
@@ -110,22 +113,57 @@ public class Calculator {
         }
         return false;
     }
-
-    private static void goingCalculations (String operand, String atFirtsArgument, String atSecondArgument){
-        if (operand.equals("-")){
-
+//String operand, String atFirtsArgument, String atSecondArgument
+    private static void startCalculations (){
+        if (operationSymbol.equals("-")){
+            subtraction();
         }
-        if (operand.equals("+")){
-
+        if (operationSymbol.equals("+")){
+            addition();
         }
-        if (operand.equals("*")){
-
+        if (operationSymbol.equals("*")){
+            multiplication();
         }
-        if (operand.equals("/")){
-
+        if (operationSymbol.equals("/")){
+            division();
         }
-        if (operand.equals("^")){
-
+        if (operationSymbol.equals("^")){
+            exponentiation();
         }
+    }
+
+
+    private static void subtraction(){
+        BigDecimal numeralFirstArgument = new BigDecimal(firstArgument.toString());
+        BigDecimal numeralSecondArgument = new BigDecimal(secondArgument.toString());
+        m(String.valueOf(numeralFirstArgument.subtract(numeralSecondArgument)));
+    }
+
+    private static void addition(){
+        BigDecimal numeralFirstArgument = new BigDecimal(firstArgument.toString());
+        BigDecimal numeralSecondArgument = new BigDecimal(secondArgument.toString());
+        m(String.valueOf(numeralFirstArgument.add(numeralSecondArgument)));
+    }
+
+    private static void multiplication(){
+        BigDecimal numeralFirstArgument = new BigDecimal(firstArgument.toString());
+        BigDecimal numeralSecondArgument = new BigDecimal(secondArgument.toString());
+        m(String.valueOf(numeralFirstArgument.multiply(numeralSecondArgument)));
+
+    }
+    private static void division (){
+        BigDecimal numeralFirstArgument = new BigDecimal(firstArgument.toString());
+        BigDecimal numeralSecondArgument = new BigDecimal(secondArgument.toString());
+        m(String.valueOf(numeralFirstArgument.divide(numeralSecondArgument)));
+
+    }
+
+    private static void exponentiation(){
+        BigDecimal numeralFirstArgument = new BigDecimal(firstArgument.toString());
+        BigDecimal numeralSecondArgument = new BigDecimal(secondArgument.toString());
+        //интовая строка, может быть ошибка, разобраться
+        //попробовать написать метод для возведения в степень
+        m(String.valueOf(numeralFirstArgument.pow(numeralSecondArgument.intValue())));
+
     }
 }

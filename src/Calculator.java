@@ -9,10 +9,9 @@ public class Calculator {
     static StringBuilder firstArgument = new StringBuilder();
     static StringBuilder secondArgument = new StringBuilder();
     static String readConsole = null;
-
-
-    //ArrayList<Character> firstArgument = new ArrayList<>();
     static String operationSymbol;
+    static String pointForFirstArgument;
+    static String pointForSecondArgument;
     int result;
 
     public static void m(String message) {
@@ -20,15 +19,16 @@ public class Calculator {
     }
 
     public static void startWorkingCalculator() {
-        firstArgument.delete(0,firstArgument.length());
-        secondArgument.delete(0,secondArgument.length());
+        firstArgument.delete(0, firstArgument.length());
+        secondArgument.delete(0, secondArgument.length());
         operationSymbol = null;
         readConsole();
         while (readConsoleNotExit(readConsole)) {
             checkReadConsoleIsNumber(readConsole);
-            m(firstArgument.toString());
-            m(secondArgument.toString());
+//            m(firstArgument.toString());
+//            m(secondArgument.toString());
             startCalculations();
+            m("\nВведите в консоль ваше выражение целиком:");
             startWorkingCalculator();
         }
     }
@@ -47,7 +47,6 @@ public class Calculator {
     private static boolean readConsoleNotExit(String consoleText) {
         if (consoleText.equals("exit")) {
             System.out.println(" Спасибо, что пользуетесь нашим калькулятором" + "\n Всего хорошего!");
-         // System.exit(0);
             return false;
         }
         return true;
@@ -56,37 +55,42 @@ public class Calculator {
 
     private static void checkReadConsoleIsNumber(String readConsoleText) {
         String textSymbol;
-        //убрать пробелы в строке
-        //вариант через replace " " на ""
+        readConsoleText = readConsoleText.replaceAll(" ", ""); //убрать пробелы в строке
         for (int index = 0; index < readConsoleText.length(); index++) {
             textSymbol = String.valueOf(readConsoleText.charAt(index));
-            //m(textSymbol);
             //возможно стоит прописать отсечение варианта, где первый символ является операцией
+            if (textSymbolIsOperation(String.valueOf(readConsoleText.charAt(0)))) {
+                m(" Извините, возможно вы забыли ввести первый аргумент, попробуйте ещё раз:");
+                startWorkingCalculator();
+            }
+            if (textSymbolIsPoint(String.valueOf(readConsoleText.charAt(0)))) {
+                m(" Извините, возможно вы решили вводить дробную часть без обозначения целого числа, попробуйте ещё раз:");
+                startWorkingCalculator();
+            }
+
             if (operationSymbol == null) {
                 if (textSymbolIsOperation(textSymbol)) {
                     operationSymbol = textSymbol;
-                    m(" Первый символ операции равен: " + operationSymbol);
                 }
-                else if (textSymbolIsInteger(textSymbol)){
+                // textSymbolIsPoint(String.valueOf(readConsoleText.charAt(0)))
+//                else if (pointForFirstArgument == null){
+//
+//                }
+                else if (textSymbolIsInteger(textSymbol)) {
                     firstArgument.append(textSymbol);
-                }
-                else {
-                    m(" Возможно вы воспользовались не числами, попробуйте ещё раз");
+                } else {
+                    m(" Возможно вы воспользовались не только числами, попробуйте ещё раз:");
                     startWorkingCalculator();
                 }
-            }
-
-            //if (!(operationSymbol == null)) {
-            else  {  if (textSymbolIsOperation(textSymbol)) {
+            } else {
+                if (textSymbolIsOperation(textSymbol)) {
                     m(" У нас что, два символа операции одновременно???");
                     m(" Извините, но мы за последовательное вычисление");
                     m(" Давайте попробуем ещё раз");
                     startWorkingCalculator();
-                }
-                else if (textSymbolIsInteger(textSymbol)){
+                } else if (textSymbolIsInteger(textSymbol)) {
                     secondArgument.append(textSymbol);
-                }
-                else {
+                } else {
                     m(" Возможно вы воспользовались не числами, попробуйте ещё раз");
                     startWorkingCalculator();
                 }
@@ -113,57 +117,65 @@ public class Calculator {
         }
         return false;
     }
-//String operand, String atFirtsArgument, String atSecondArgument
-    private static void startCalculations (){
-        if (operationSymbol.equals("-")){
+
+    private static boolean textSymbolIsPoint(String symbolOfReadConsole) {
+        if (symbolOfReadConsole.equals(".")) {
+            return true;
+        } else return false;
+    }
+
+    //String operand, String atFirtsArgument, String atSecondArgument
+    private static void startCalculations() {
+        if (operationSymbol.equals("-")) {
             subtraction();
         }
-        if (operationSymbol.equals("+")){
+        if (operationSymbol.equals("+")) {
             addition();
         }
-        if (operationSymbol.equals("*")){
+        if (operationSymbol.equals("*")) {
             multiplication();
         }
-        if (operationSymbol.equals("/")){
+        if (operationSymbol.equals("/")) {
             division();
         }
-        if (operationSymbol.equals("^")){
+        if (operationSymbol.equals("^")) {
             exponentiation();
         }
     }
 
 
-    private static void subtraction(){
+    private static void subtraction() {
         BigDecimal numeralFirstArgument = new BigDecimal(firstArgument.toString());
         BigDecimal numeralSecondArgument = new BigDecimal(secondArgument.toString());
-        m(String.valueOf(numeralFirstArgument.subtract(numeralSecondArgument)));
+        m("Результат: " + String.valueOf(numeralFirstArgument.subtract(numeralSecondArgument)));
     }
 
-    private static void addition(){
+    private static void addition() {
         BigDecimal numeralFirstArgument = new BigDecimal(firstArgument.toString());
         BigDecimal numeralSecondArgument = new BigDecimal(secondArgument.toString());
-        m(String.valueOf(numeralFirstArgument.add(numeralSecondArgument)));
+        m("Результат: " + String.valueOf(numeralFirstArgument.add(numeralSecondArgument)));
     }
 
-    private static void multiplication(){
+    private static void multiplication() {
         BigDecimal numeralFirstArgument = new BigDecimal(firstArgument.toString());
         BigDecimal numeralSecondArgument = new BigDecimal(secondArgument.toString());
-        m(String.valueOf(numeralFirstArgument.multiply(numeralSecondArgument)));
-
-    }
-    private static void division (){
-        BigDecimal numeralFirstArgument = new BigDecimal(firstArgument.toString());
-        BigDecimal numeralSecondArgument = new BigDecimal(secondArgument.toString());
-        m(String.valueOf(numeralFirstArgument.divide(numeralSecondArgument)));
+        m("Результат: " + String.valueOf(numeralFirstArgument.multiply(numeralSecondArgument)));
 
     }
 
-    private static void exponentiation(){
+    private static void division() {
+        BigDecimal numeralFirstArgument = new BigDecimal(firstArgument.toString());
+        BigDecimal numeralSecondArgument = new BigDecimal(secondArgument.toString());
+        m("Результат: " + String.valueOf(numeralFirstArgument.divide(numeralSecondArgument)));
+
+    }
+
+    private static void exponentiation() {
         BigDecimal numeralFirstArgument = new BigDecimal(firstArgument.toString());
         BigDecimal numeralSecondArgument = new BigDecimal(secondArgument.toString());
         //интовая строка, может быть ошибка, разобраться
         //попробовать написать метод для возведения в степень
-        m(String.valueOf(numeralFirstArgument.pow(numeralSecondArgument.intValue())));
-
+        m("Результат: " + String.valueOf(numeralFirstArgument.pow(numeralSecondArgument.intValue())));
+        //Math.exp( step * Math.log(x));
     }
 }

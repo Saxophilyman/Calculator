@@ -12,7 +12,6 @@ public class Calculator {
     static String operationSymbol;
     static String pointForFirstArgument;
     static String pointForSecondArgument;
-    int result;
 
     public static void m(String message) {
         System.out.println(message);
@@ -22,11 +21,11 @@ public class Calculator {
         firstArgument.delete(0, firstArgument.length());
         secondArgument.delete(0, secondArgument.length());
         operationSymbol = null;
+        pointForFirstArgument = null;
+        pointForSecondArgument = null;
         readConsole();
         while (readConsoleNotExit(readConsole)) {
             checkReadConsoleIsNumber(readConsole);
-//            m(firstArgument.toString());
-//            m(secondArgument.toString());
             startCalculations();
             m("\nВведите в консоль ваше выражение целиком:");
             startWorkingCalculator();
@@ -71,13 +70,16 @@ public class Calculator {
             if (operationSymbol == null) {
                 if (textSymbolIsOperation(textSymbol)) {
                     operationSymbol = textSymbol;
-                }
-                // textSymbolIsPoint(String.valueOf(readConsoleText.charAt(0)))
-//                else if (pointForFirstArgument == null){
-//
-//                }
-                else if (textSymbolIsInteger(textSymbol)) {
+                } else if (textSymbolIsInteger(textSymbol)) {
                     firstArgument.append(textSymbol);
+                } else if (textSymbolIsPoint(textSymbol)) {
+                    if (pointForFirstArgument == null) {
+                        pointForFirstArgument = textSymbol;
+                        firstArgument.append(textSymbol);
+                    } else {
+                        m("Возможно вы использовали обозначение для дробной части более одного раза, попробуйте ещё раз:");
+                        startWorkingCalculator();
+                    }
                 } else {
                     m(" Возможно вы воспользовались не только числами, попробуйте ещё раз:");
                     startWorkingCalculator();
@@ -90,6 +92,14 @@ public class Calculator {
                     startWorkingCalculator();
                 } else if (textSymbolIsInteger(textSymbol)) {
                     secondArgument.append(textSymbol);
+                } else if (textSymbolIsPoint(textSymbol)) {
+                    if (pointForSecondArgument == null) {
+                        pointForSecondArgument = textSymbol;
+                        secondArgument.append(textSymbol);
+                    } else {
+                        m(" Возможно вы использовали обозначение для дробной части более одного раза, попробуйте ещё раз:");
+                        startWorkingCalculator();
+                    }
                 } else {
                     m(" Возможно вы воспользовались не числами, попробуйте ещё раз");
                     startWorkingCalculator();

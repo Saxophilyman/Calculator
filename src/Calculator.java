@@ -101,7 +101,7 @@ public class Calculator {
                         startWorkingCalculator();
                     }
                 } else {
-                    m(" Возможно вы воспользовались не числами, попробуйте ещё раз");
+                    m(" Возможно вы воспользовались не только числами, попробуйте ещё раз");
                     startWorkingCalculator();
                 }
             }
@@ -136,23 +136,33 @@ public class Calculator {
 
     //String operand, String atFirtsArgument, String atSecondArgument
     private static void startCalculations() {
-        if (operationSymbol.equals("-")) {
-            subtraction();
-        }
-        if (operationSymbol.equals("+")) {
-            addition();
-        }
-        if (operationSymbol.equals("*")) {
-            multiplication();
-        }
-        if (operationSymbol.equals("/")) {
-            division();
-        }
-        if (operationSymbol.equals("^")) {
-            exponentiation();
+        if (checkArgumentIsNotNull(firstArgument, secondArgument)) {
+            if (operationSymbol.equals("-")) {
+                subtraction();
+            }
+            if (operationSymbol.equals("+")) {
+                addition();
+            }
+            if (operationSymbol.equals("*")) {
+                multiplication();
+            }
+            if (operationSymbol.equals("/")) {
+                division();
+            }
+            if (operationSymbol.equals("^")) {
+                exponentiation();
+            }
+        } else {
+            m("Один из аргументов не введён в консоль. Попробуйте ввести всё выражение целиком:");
+            startWorkingCalculator();
         }
     }
 
+    private static boolean checkArgumentIsNotNull(StringBuilder firstArgument, StringBuilder secondArgument) {
+        if (firstArgument.length() == 0 || secondArgument.toString().isEmpty()) {
+            return false;
+        } else return true;
+    }
 
     private static void subtraction() {
         BigDecimal numeralFirstArgument = new BigDecimal(firstArgument.toString());
@@ -176,7 +186,12 @@ public class Calculator {
     private static void division() {
         BigDecimal numeralFirstArgument = new BigDecimal(firstArgument.toString());
         BigDecimal numeralSecondArgument = new BigDecimal(secondArgument.toString());
-        m("Результат: " + String.valueOf(numeralFirstArgument.divide(numeralSecondArgument)));
+        if (numeralSecondArgument.compareTo(BigDecimal.valueOf(0)) == 0) {
+            m("Вспомните, на ноль делить нельзя!" +
+                    "\nПопробуйте делить не на ноль:");
+            startWorkingCalculator();
+        }
+        m("Результат: " + String.valueOf(numeralFirstArgument.divide(numeralSecondArgument,7,BigDecimal.ROUND_HALF_EVEN))); //почему depricate?
 
     }
 

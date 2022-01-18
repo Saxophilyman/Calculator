@@ -45,7 +45,7 @@ public class Calculator {
 
     private static boolean readConsoleNotExit(String consoleText) {
         if (consoleText.equals("exit")) {
-            System.out.println(" Спасибо, что пользуетесь нашим калькулятором" + "\n Всего хорошего!");
+            System.out.println("Спасибо, что пользуетесь нашим калькулятором" + "\n Всего хорошего!");
             return false;
         }
         return true;
@@ -59,11 +59,11 @@ public class Calculator {
             textSymbol = String.valueOf(readConsoleText.charAt(index));
             //возможно стоит прописать отсечение варианта, где первый символ является операцией
             if (textSymbolIsOperation(String.valueOf(readConsoleText.charAt(0)))) {
-                m(" Извините, возможно вы забыли ввести первый аргумент, попробуйте ещё раз:");
+                m("Извините, возможно вы забыли ввести первый аргумент, попробуйте ещё раз:");
                 startWorkingCalculator();
             }
             if (textSymbolIsPoint(String.valueOf(readConsoleText.charAt(0)))) {
-                m(" Извините, возможно вы решили вводить дробную часть без обозначения целого числа, попробуйте ещё раз:");
+                m("Извините, возможно вы решили вводить дробную часть без обозначения целого числа, попробуйте ещё раз:");
                 startWorkingCalculator();
             }
 
@@ -81,14 +81,14 @@ public class Calculator {
                         startWorkingCalculator();
                     }
                 } else {
-                    m(" Возможно вы воспользовались не только числами, попробуйте ещё раз:");
+                    m("Возможно вы воспользовались не только числами, попробуйте ещё раз:");
                     startWorkingCalculator();
                 }
             } else {
                 if (textSymbolIsOperation(textSymbol)) {
-                    m(" У нас что, два символа операции одновременно???");
-                    m(" Извините, но мы за последовательное вычисление");
-                    m(" Давайте попробуем ещё раз");
+                    m("У нас что, два символа операции одновременно???");
+                    m("Извините, но мы за последовательное вычисление");
+                    m("Давайте попробуем ещё раз");
                     startWorkingCalculator();
                 } else if (textSymbolIsInteger(textSymbol)) {
                     secondArgument.append(textSymbol);
@@ -97,11 +97,11 @@ public class Calculator {
                         pointForSecondArgument = textSymbol;
                         secondArgument.append(textSymbol);
                     } else {
-                        m(" Возможно вы использовали обозначение для дробной части более одного раза, попробуйте ещё раз:");
+                        m("Возможно вы использовали обозначение для дробной части более одного раза, попробуйте ещё раз:");
                         startWorkingCalculator();
                     }
                 } else {
-                    m(" Возможно вы воспользовались не только числами, попробуйте ещё раз");
+                    m("Возможно вы воспользовались не только числами, попробуйте ещё раз");
                     startWorkingCalculator();
                 }
             }
@@ -168,6 +168,7 @@ public class Calculator {
         BigDecimal numeralFirstArgument = new BigDecimal(firstArgument.toString());
         BigDecimal numeralSecondArgument = new BigDecimal(secondArgument.toString());
         m("Результат: " + String.valueOf(numeralFirstArgument.subtract(numeralSecondArgument)));
+        //почему "String.valueOf" серый?
     }
 
     private static void addition() {
@@ -196,11 +197,29 @@ public class Calculator {
     }
 
     private static void exponentiation() {
+        if (!argumentIsInt(secondArgument)){
+            m("Для данной версии калькулятора предусмотрено возведение ТОЛЬКО В НАТУРАЛЬНУЮ степень." +
+                    "\nи ОГРАНИЧЕНО размерами 999 999 999. Попробуйте ещё раз:");
+            startWorkingCalculator();
+        }
         BigDecimal numeralFirstArgument = new BigDecimal(firstArgument.toString());
         BigDecimal numeralSecondArgument = new BigDecimal(secondArgument.toString());
+
         //интовая строка, может быть ошибка, разобраться
         //попробовать написать метод для возведения в степень
-        m("Результат: " + String.valueOf(numeralFirstArgument.pow(numeralSecondArgument.intValue())));
+       m("Результат: " + String.valueOf(numeralFirstArgument.pow(numeralSecondArgument.intValue())));
+//        999999999
+//        2147483647
         //Math.exp( step * Math.log(x));
+    }
+
+    private static boolean argumentIsInt (StringBuilder textArgument){
+        try {
+            Integer.parseInt(textArgument.toString());
+            return true;
+        }
+        catch (NumberFormatException e){
+            return false;
+        }
     }
 }

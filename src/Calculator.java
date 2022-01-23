@@ -192,12 +192,12 @@ public class Calculator {
                     "\nПопробуйте делить не на ноль:");
             startWorkingCalculator();
         }
-        m("Результат: " + String.valueOf(numeralFirstArgument.divide(numeralSecondArgument,7,BigDecimal.ROUND_HALF_EVEN))); //почему depricate?
+        m("Результат: " + String.valueOf(numeralFirstArgument.divide(numeralSecondArgument, 7, BigDecimal.ROUND_HALF_EVEN))); //почему depricate?
 
     }
 
     private static void exponentiation() {
-        if (!argumentIsInt(secondArgument)){
+        if (!argumentIsInt(secondArgument)) {
             m("Для данной версии калькулятора предусмотрено возведение ТОЛЬКО В НАТУРАЛЬНУЮ степень." +
                     "\nи ОГРАНИЧЕНО размерами 999 999 999. Попробуйте ещё раз:");
             startWorkingCalculator();
@@ -207,18 +207,17 @@ public class Calculator {
 
         //интовая строка, может быть ошибка, разобраться
         //попробовать написать метод для возведения в степень
-       m("Результат: " + String.valueOf(numeralFirstArgument.pow(numeralSecondArgument.intValue())));
+        m("Результат: " + String.valueOf(numeralFirstArgument.pow(numeralSecondArgument.intValue())));
 //        999999999
 //        2147483647
         //Math.exp( step * Math.log(x));
     }
 
-    private static boolean argumentIsInt (StringBuilder textArgument){
+    private static boolean argumentIsInt(StringBuilder textArgument) {
         try {
             Integer.parseInt(textArgument.toString());
             return true;
-        }
-        catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             return false;
         }
     }

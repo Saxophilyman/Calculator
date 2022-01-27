@@ -13,7 +13,7 @@ public class Calculator {
     private String pointForFirstArgument;
     private String pointForSecondArgument;
 
-    private void printMassage(String message) {
+    private void printMessage(String message) {
         System.out.println(message);
     }
 
@@ -24,9 +24,9 @@ public class Calculator {
         pointForFirstArgument = null;
         pointForSecondArgument = null;
         readConsole();
-        while (isUserRequestsExit(readConsole)) {
+        while (isUserRequestsNotExit(readConsole)) {
             checkReadConsoleIsNumber(readConsole);
-            printMassage("\nВведите в консоль ваше выражение целиком:");
+            printMessage("\nВведите в консоль ваше выражение целиком:");
             startWorkingCalculator();
         }
     }
@@ -40,7 +40,7 @@ public class Calculator {
         }
     }
 
-    private boolean isUserRequestsExit(String isReadConsoleText) {
+    private boolean isUserRequestsNotExit(String isReadConsoleText) {
         if (isReadConsoleText.equals("exit")) {
             System.out.println("Спасибо, что пользуетесь нашим калькулятором" + "\nВсего хорошего!");
             return false;
@@ -55,12 +55,12 @@ public class Calculator {
             textSymbol = String.valueOf(readConsoleText.charAt(index));
             //возможно стоит прописать отсечение варианта, где первый символ является операцией
             if (textSymbolIsOperation(String.valueOf(readConsoleText.charAt(0)))) {
-                printMassage("Извините, возможно вы забыли ввести первый аргумент, попробуйте ещё раз:");
+                printMessage("Извините, возможно вы забыли ввести первый аргумент, попробуйте ещё раз:");
                 startWorkingCalculator();
                 return;
             }
             if (textSymbolIsPoint(String.valueOf(readConsoleText.charAt(0)))) {
-                printMassage("Извините, возможно вы решили вводить дробную часть без обозначения целого числа, попробуйте ещё раз:");
+                printMessage("Извините, возможно вы решили вводить дробную часть без обозначения целого числа, попробуйте ещё раз:");
                 startWorkingCalculator();
                 return;
             }
@@ -75,18 +75,18 @@ public class Calculator {
                         pointForFirstArgument = textSymbol;
                         firstArgument.append(textSymbol);
                     } else {
-                        printMassage("Возможно вы использовали обозначение для дробной части более одного раза, попробуйте ещё раз:");
+                        printMessage("Возможно вы использовали обозначение для дробной части более одного раза, попробуйте ещё раз:");
                         startWorkingCalculator();
                         return;
                     }
                 } else {
-                    printMassage("Возможно вы воспользовались не только числами, попробуйте ещё раз:");
+                    printMessage("Возможно вы воспользовались не только числами, попробуйте ещё раз:");
                     startWorkingCalculator();
                     return;
                 }
             } else {
                 if (textSymbolIsOperation(textSymbol)) {
-                    printMassage("У нас что, два символа операции одновременно???" +
+                    printMessage("У нас что, два символа операции одновременно???" +
                             "\nИзвините, но мы за последовательное вычисление" +
                             "\nДавайте попробуем ещё раз");
                     startWorkingCalculator();
@@ -98,12 +98,12 @@ public class Calculator {
                         pointForSecondArgument = textSymbol;
                         secondArgument.append(textSymbol);
                     } else {
-                        printMassage("Возможно вы использовали обозначение для дробной части более одного раза, попробуйте ещё раз:");
+                        printMessage("Возможно вы использовали обозначение для дробной части более одного раза, попробуйте ещё раз:");
                         startWorkingCalculator();
                         return;
                     }
                 } else {
-                    printMassage("Возможно вы воспользовались не только числами, попробуйте ещё раз");
+                    printMessage("Возможно вы воспользовались не только числами, попробуйте ещё раз");
                     startWorkingCalculator();
                     return;
                 }
@@ -138,22 +138,22 @@ public class Calculator {
             BigDecimal numeralSecondArgument = new BigDecimal(secondArgument.toString());
 
             if (operationSymbol.equals("-")) {
-                subtract(numeralFirstArgument, numeralSecondArgument);
+                applySubtractOperation(numeralFirstArgument, numeralSecondArgument);
             }
             if (operationSymbol.equals("+")) {
-                add(numeralFirstArgument, numeralSecondArgument);
+                applyAddOperation(numeralFirstArgument, numeralSecondArgument);
             }
             if (operationSymbol.equals("*")) {
-                multiply(numeralFirstArgument, numeralSecondArgument);
+                applyMultiplyOperation(numeralFirstArgument, numeralSecondArgument);
             }
             if (operationSymbol.equals("/")) {
-                divide(numeralFirstArgument, numeralSecondArgument);
+                applyDivideOperation(numeralFirstArgument, numeralSecondArgument);
             }
             if (operationSymbol.equals("^")) {
-                exponentiate(numeralFirstArgument, numeralSecondArgument);
+                applyExponentiateOperation(numeralFirstArgument, numeralSecondArgument);
             }
         } else {
-            printMassage("Один из аргументов не введён в консоль. Попробуйте ввести всё выражение целиком:");
+            printMessage("Один из аргументов не введён в консоль. Попробуйте ввести всё выражение целиком:");
             startWorkingCalculator();
         }
     }
@@ -162,36 +162,36 @@ public class Calculator {
         return firstArgument.length() != 0 && !secondArgument.toString().isEmpty();
     }
 
-    private void subtract(BigDecimal numeralFirstArgument, BigDecimal numeralSecondArgument) {
-        printMassage("Результат: " + numeralFirstArgument.subtract(numeralSecondArgument));
+    private void applySubtractOperation(BigDecimal numeralFirstArgument, BigDecimal numeralSecondArgument) {
+        printMessage("Результат: " + numeralFirstArgument.subtract(numeralSecondArgument));
     }
 
-    private void add(BigDecimal numeralFirstArgument, BigDecimal numeralSecondArgument) {
-        printMassage("Результат: " + numeralFirstArgument.add(numeralSecondArgument));
+    private void applyAddOperation(BigDecimal numeralFirstArgument, BigDecimal numeralSecondArgument) {
+        printMessage("Результат: " + numeralFirstArgument.add(numeralSecondArgument));
     }
 
-    private void multiply(BigDecimal numeralFirstArgument, BigDecimal numeralSecondArgument) {
-        printMassage("Результат: " + numeralFirstArgument.multiply(numeralSecondArgument));
+    private void applyMultiplyOperation(BigDecimal numeralFirstArgument, BigDecimal numeralSecondArgument) {
+        printMessage("Результат: " + numeralFirstArgument.multiply(numeralSecondArgument));
 
     }
 
-    private void divide(BigDecimal numeralFirstArgument, BigDecimal numeralSecondArgument) {
+    private void applyDivideOperation(BigDecimal numeralFirstArgument, BigDecimal numeralSecondArgument) {
         if (numeralSecondArgument.compareTo(BigDecimal.valueOf(0)) == 0) {
-            printMassage("Вспомните, на ноль делить нельзя!" +
+            printMessage("Вспомните, на ноль делить нельзя!" +
                     "\nПопробуйте делить не на ноль:");
             startWorkingCalculator();
         }
-        printMassage("Результат: " + numeralFirstArgument.divide(numeralSecondArgument, 7, BigDecimal.ROUND_HALF_EVEN)); //почему depricate?
+        printMessage("Результат: " + numeralFirstArgument.divide(numeralSecondArgument, 7, BigDecimal.ROUND_HALF_EVEN)); //почему depricate?
 
     }
 
-    private void exponentiate(BigDecimal numeralFirstArgument, BigDecimal numeralSecondArgument) {
+    private void applyExponentiateOperation(BigDecimal numeralFirstArgument, BigDecimal numeralSecondArgument) {
         if (!argumentIsInt(secondArgument)) {
-            printMassage("Для данной версии калькулятора предусмотрено возведение ТОЛЬКО В НАТУРАЛЬНУЮ степень." +
+            printMessage("Для данной версии калькулятора предусмотрено возведение ТОЛЬКО В НАТУРАЛЬНУЮ степень." +
                     "\nи ОГРАНИЧЕНО размерами 999 999 999. Попробуйте ещё раз:");
             startWorkingCalculator();
         }
-        printMassage("Результат: " + numeralFirstArgument.pow(numeralSecondArgument.intValue()));
+        printMessage("Результат: " + numeralFirstArgument.pow(numeralSecondArgument.intValue()));
         //Math.exp( step * Math.log(x));
     }
 

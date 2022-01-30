@@ -13,7 +13,8 @@ public class Calculator {
     private String operationSymbol;
     private String pointForFirstArgument;
     private String pointForSecondArgument;
-
+    private String informationOfOperation;
+    private String result;
 
     private void printMessage(String message) {
         System.out.println(message);
@@ -43,14 +44,14 @@ public class Calculator {
             readConsole = reader.readLine();
             return true;
         } catch (Exception e) {
-            System.out.println("Что-то пошло не так, извините");
+            printMessage("Что-то пошло не так, извините");
             return false;
         }
     }
 
     private boolean isUserRequestsNotExit(String isReadConsoleTextExit) {
         if (isReadConsoleTextExit.equals("exit")) {
-            System.out.println("Спасибо, что пользуетесь нашим калькулятором" + "\nВсего хорошего!");
+            printMessage("Спасибо, что пользуетесь нашим калькулятором" + "\nВсего хорошего!");
             return false;
         }
         return true;
@@ -70,10 +71,9 @@ public class Calculator {
 
     private boolean printLastOperations(ArrayList<String> listOfLastOperations) {
         if (listOfLastOperations.isEmpty()) {
-            System.out.println("Мы не можем отобразить список последних операций, возможно вы ещё не ввели ни одного выражения." +
+            printMessage("Мы не можем отобразить список последних операций, возможно вы ещё не ввели ни одного выражения." +
                     "\nВведите в консоль ваше выражение целиком:");
         } else {
-            System.out.println("listOfLastOperations не null");
             for (int index = 0; index < listOfLastOperations.size(); index++) {
                 System.out.println(listOfLastOperations.get(index));
             }
@@ -105,7 +105,6 @@ public class Calculator {
                 startWorkingCalculator();
                 return;
             }
-
             if (operationSymbol == null) {
                 if (textSymbolIsOperation(textSymbol)) {
                     operationSymbol = textSymbol;
@@ -194,11 +193,17 @@ public class Calculator {
             if (operationSymbol.equals("^")) {
                 applyExponentiateOperation(numeralFirstArgument, numeralSecondArgument);
             }
+            addOperationToListOfLastOperations(listOfLastOperations, concatenationInformationOfOperation());
         } else {
             printMessage("Один из аргументов не введён в консоль. Попробуйте ввести всё выражение целиком:");
             startWorkingCalculator();
         }
     }
+
+    private String concatenationInformationOfOperation () {
+        return informationOfOperation = firstArgument + operationSymbol + secondArgument + " = " + "результат";
+    }
+
 
     private boolean checkArgumentIsNotNull(StringBuilder firstArgument, StringBuilder secondArgument) {
         return firstArgument.length() != 0 && !secondArgument.toString().isEmpty();
@@ -214,7 +219,6 @@ public class Calculator {
 
     private void applyMultiplyOperation(BigDecimal numeralFirstArgument, BigDecimal numeralSecondArgument) {
         printMessage("Результат: " + numeralFirstArgument.multiply(numeralSecondArgument));
-
     }
 
     private void applyDivideOperation(BigDecimal numeralFirstArgument, BigDecimal numeralSecondArgument) {
@@ -224,7 +228,6 @@ public class Calculator {
             startWorkingCalculator();
         }
         printMessage("Результат: " + numeralFirstArgument.divide(numeralSecondArgument, 7, BigDecimal.ROUND_HALF_EVEN)); //почему depricate?
-
     }
 
     private void applyExponentiateOperation(BigDecimal numeralFirstArgument, BigDecimal numeralSecondArgument) {

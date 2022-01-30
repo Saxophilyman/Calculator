@@ -5,13 +5,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Calculator {
-    private final static ArrayList<String> listOfAllOperations = new ArrayList<>(Arrays.asList("-", "+", "*", "/", "^"));
+    private final static ArrayList<String> listOfAllOperators = new ArrayList<>(Arrays.asList("-", "+", "*", "/", "^"));
+    private ArrayList<String> listOfLastOperations = new ArrayList<>(10);
     private StringBuilder firstArgument = new StringBuilder();
     private StringBuilder secondArgument = new StringBuilder();
     private String readConsole = null;
     private String operationSymbol;
     private String pointForFirstArgument;
     private String pointForSecondArgument;
+
 
     private void printMessage(String message) {
         System.out.println(message);
@@ -25,27 +27,66 @@ public class Calculator {
         pointForSecondArgument = null;
         readConsole();
         while (isUserRequestsNotExit(readConsole)) {
-            checkReadConsoleIsNumber(readConsole);
-            printMessage("\nВведите в консоль ваше выражение целиком:");
+            if (!isUserRequestsMemory(readConsole)) {
+                checkReadConsoleIsNumber(readConsole);
+                printMessage("\nВведите в консоль ваше выражение целиком:");
+            }
             startWorkingCalculator();
         }
     }
 
-    private void readConsole() {
+    // если я правильно понял. но жёлтый маркер справа говорит, что return value of the method is never used
+// А как по другому??
+    private boolean readConsole() {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         try {
             readConsole = reader.readLine();
+            return true;
         } catch (Exception e) {
             System.out.println("Что-то пошло не так, извините");
+            return false;
         }
     }
 
-    private boolean isUserRequestsNotExit(String isReadConsoleText) {
-        if (isReadConsoleText.equals("exit")) {
+    private boolean isUserRequestsNotExit(String isReadConsoleTextExit) {
+        if (isReadConsoleTextExit.equals("exit")) {
             System.out.println("Спасибо, что пользуетесь нашим калькулятором" + "\nВсего хорошего!");
             return false;
         }
         return true;
+    }
+
+
+    //нихуя не понятны приколы с булеаном и ретёрном
+    //та же return value of the method is never used
+    private boolean isUserRequestsMemory(String isReadConsoleTextMemory) {
+        if (isReadConsoleTextMemory.equals("memory")) {
+            /*???*/
+            return printLastOperations(listOfLastOperations);
+        }
+        /*???*/
+        return false;
+    }
+
+    private boolean printLastOperations(ArrayList<String> listOfLastOperations) {
+        if (listOfLastOperations.isEmpty()) {
+            System.out.println("Мы не можем отобразить список последних операций, возможно вы ещё не ввели ни одного выражения." +
+                    "\nВведите в консоль ваше выражение целиком:");
+        } else {
+            System.out.println("listOfLastOperations не null");
+            for (int index = 0; index < listOfLastOperations.size(); index++) {
+                System.out.println(listOfLastOperations.get(index));
+            }
+        }
+        /*???*/
+        return true;
+    }
+
+    private void addOperationToListOfLastOperations(ArrayList<String> listOfLastOperations, String Operation) {
+        if (listOfLastOperations.size() >= 10) {
+            listOfLastOperations.remove(0);
+        }
+        listOfLastOperations.add(Operation);
     }
 
     private void checkReadConsoleIsNumber(String readConsoleText) {
@@ -113,7 +154,7 @@ public class Calculator {
     }
 
     private boolean textSymbolIsOperation(String symbolOfReadConsole) {
-        return listOfAllOperations.contains(symbolOfReadConsole);
+        return listOfAllOperators.contains(symbolOfReadConsole);
     }
 
     private boolean textSymbolIsInteger(String symbolOfReadConsole) {
@@ -136,6 +177,7 @@ public class Calculator {
         if (checkArgumentIsNotNull(firstArgument, secondArgument)) {
             BigDecimal numeralFirstArgument = new BigDecimal(firstArgument.toString());
             BigDecimal numeralSecondArgument = new BigDecimal(secondArgument.toString());
+
 
             if (operationSymbol.equals("-")) {
                 applySubtractOperation(numeralFirstArgument, numeralSecondArgument);

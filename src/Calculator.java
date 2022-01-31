@@ -14,7 +14,7 @@ public class Calculator {
     private String pointForFirstArgument;
     private String pointForSecondArgument;
     private String informationOfOperation;
-    private String result;
+    private BigDecimal result;
 
     private void printMessage(String message) {
         System.out.println(message);
@@ -26,6 +26,7 @@ public class Calculator {
         operationSymbol = null;
         pointForFirstArgument = null;
         pointForSecondArgument = null;
+        result = null;
         readConsole();
         while (isUserRequestsNotExit(readConsole)) {
             if (!isUserRequestsMemory(readConsole)) {
@@ -126,9 +127,10 @@ public class Calculator {
                 }
             } else {
                 if (textSymbolIsOperation(textSymbol)) {
-                    printMessage("У нас что, два символа операции одновременно???" +
-                            "\nИзвините, но мы за последовательное вычисление" +
-                            "\nДавайте попробуем ещё раз");
+                    printMessage("""
+                            У нас что, два символа операции одновременно???
+                            Извините, но мы за последовательное вычисление
+                            Давайте попробуем ещё раз""");
                     startWorkingCalculator();
                     return;
                 } else if (textSymbolIsInteger(textSymbol)) {
@@ -200,8 +202,8 @@ public class Calculator {
         }
     }
 
-    private String concatenationInformationOfOperation () {
-        return informationOfOperation = firstArgument + operationSymbol + secondArgument + " = " + "результат";
+    private String concatenationInformationOfOperation() {
+        return informationOfOperation = firstArgument + operationSymbol + secondArgument + " = " + result;
     }
 
 
@@ -210,15 +212,18 @@ public class Calculator {
     }
 
     private void applySubtractOperation(BigDecimal numeralFirstArgument, BigDecimal numeralSecondArgument) {
-        printMessage("Результат: " + numeralFirstArgument.subtract(numeralSecondArgument));
+        result = numeralFirstArgument.subtract(numeralSecondArgument);
+        printMessage("Результат: " + result);
     }
 
     private void applyAddOperation(BigDecimal numeralFirstArgument, BigDecimal numeralSecondArgument) {
-        printMessage("Результат: " + numeralFirstArgument.add(numeralSecondArgument));
+        result = numeralFirstArgument.add(numeralSecondArgument);
+        printMessage("Результат: " + result);
     }
 
     private void applyMultiplyOperation(BigDecimal numeralFirstArgument, BigDecimal numeralSecondArgument) {
-        printMessage("Результат: " + numeralFirstArgument.multiply(numeralSecondArgument));
+        result = numeralFirstArgument.multiply(numeralSecondArgument);
+        printMessage("Результат: " + result);
     }
 
     private void applyDivideOperation(BigDecimal numeralFirstArgument, BigDecimal numeralSecondArgument) {
@@ -227,7 +232,8 @@ public class Calculator {
                     "\nПопробуйте делить не на ноль:");
             startWorkingCalculator();
         }
-        printMessage("Результат: " + numeralFirstArgument.divide(numeralSecondArgument, 7, BigDecimal.ROUND_HALF_EVEN)); //почему depricate?
+        result = numeralFirstArgument.divide(numeralSecondArgument, 7, BigDecimal.ROUND_HALF_EVEN);//почему depricate?
+        printMessage("Результат: " + result);
     }
 
     private void applyExponentiateOperation(BigDecimal numeralFirstArgument, BigDecimal numeralSecondArgument) {
@@ -236,7 +242,8 @@ public class Calculator {
                     "\nи ОГРАНИЧЕНО размерами 999 999 999. Попробуйте ещё раз:");
             startWorkingCalculator();
         }
-        printMessage("Результат: " + numeralFirstArgument.pow(numeralSecondArgument.intValue()));
+        result = numeralFirstArgument.pow(numeralSecondArgument.intValue());
+        printMessage("Результат: " + result);
         //Math.exp( step * Math.log(x));
     }
 

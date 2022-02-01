@@ -1,8 +1,12 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class Calculator {
     private final static ArrayList<String> listOfAllOperators = new ArrayList<>(Arrays.asList("-", "+", "*", "/", "^"));
@@ -78,6 +82,7 @@ public class Calculator {
             for (int index = 0; index < listOfLastOperations.size(); index++) {
                 System.out.println(listOfLastOperations.get(index));
             }
+            printMessage("\nВведите в консоль ваше выражение целиком:");
         }
         /*???*/
         return true;
@@ -127,10 +132,9 @@ public class Calculator {
                 }
             } else {
                 if (textSymbolIsOperation(textSymbol)) {
-                    printMessage("""
-                            У нас что, два символа операции одновременно???
-                            Извините, но мы за последовательное вычисление
-                            Давайте попробуем ещё раз""");
+                    printMessage("У нас что, два символа операции одновременно???\n" +
+                                 "Извините, но мы за последовательное вычисление\n" +
+                                 "Давайте попробуем ещё раз");
                     startWorkingCalculator();
                     return;
                 } else if (textSymbolIsInteger(textSymbol)) {
@@ -174,6 +178,13 @@ public class Calculator {
         return symbolOfReadConsole.equals(".");
     }
 
+    private String timeOfOperation(){
+        Calendar calendar = new GregorianCalendar();
+        DateFormat timeOfOperation = new SimpleDateFormat("dd MMM yyy HH:mm"); //не смог найти вариант, где сокращённое название месяца выводится без точки
+        return timeOfOperation.format(calendar.getTime());
+    }
+
+
     private void startCalculations() {
         if (checkArgumentIsNotNull(firstArgument, secondArgument)) {
             BigDecimal numeralFirstArgument = new BigDecimal(firstArgument.toString());
@@ -203,7 +214,7 @@ public class Calculator {
     }
 
     private String concatenationInformationOfOperation() {
-        return informationOfOperation = firstArgument + operationSymbol + secondArgument + " = " + result;
+        return informationOfOperation = timeOfOperation() + " : " + firstArgument + operationSymbol + secondArgument + " = " + result;
     }
 
 

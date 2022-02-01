@@ -77,7 +77,7 @@ public class Calculator {
     private boolean printLastOperations(ArrayList<String> listOfLastOperations) {
         if (listOfLastOperations.isEmpty()) {
             printMessage("Мы не можем отобразить список последних операций, возможно вы ещё не ввели ни одного выражения." +
-                    "\nВведите в консоль ваше выражение целиком:");
+                         "\nВведите в консоль ваше выражение целиком:");
         } else {
             for (int index = 0; index < listOfLastOperations.size(); index++) {
                 System.out.println(listOfLastOperations.get(index));
@@ -178,7 +178,7 @@ public class Calculator {
         return symbolOfReadConsole.equals(".");
     }
 
-    private String timeOfOperation(){
+    private String timeOfOperation() {
         Calendar calendar = new GregorianCalendar();
         DateFormat timeOfOperation = new SimpleDateFormat("dd MMM yyy HH:mm"); //не смог найти вариант, где сокращённое название месяца выводится без точки
         return timeOfOperation.format(calendar.getTime());
@@ -240,7 +240,7 @@ public class Calculator {
     private void applyDivideOperation(BigDecimal numeralFirstArgument, BigDecimal numeralSecondArgument) {
         if (numeralSecondArgument.compareTo(BigDecimal.valueOf(0)) == 0) {
             printMessage("Вспомните, на ноль делить нельзя!" +
-                    "\nПопробуйте делить не на ноль:");
+                         "\nПопробуйте делить не на ноль:");
             startWorkingCalculator();
         }
         result = numeralFirstArgument.divide(numeralSecondArgument, 7, BigDecimal.ROUND_HALF_EVEN);//почему depricate?
@@ -250,7 +250,7 @@ public class Calculator {
     private void applyExponentiateOperation(BigDecimal numeralFirstArgument, BigDecimal numeralSecondArgument) {
         if (!argumentIsInt(secondArgument)) {
             printMessage("Для данной версии калькулятора предусмотрено возведение ТОЛЬКО В НАТУРАЛЬНУЮ степень." +
-                    "\nи ОГРАНИЧЕНО размерами 999 999 999. Попробуйте ещё раз:");
+                         "\nи ОГРАНИЧЕНО размерами 999 999 999. Попробуйте ещё раз:");
             startWorkingCalculator();
         }
         result = numeralFirstArgument.pow(numeralSecondArgument.intValue());

@@ -17,7 +17,6 @@ public class Calculator {
     private String operationSymbol;
     private String pointForFirstArgument;
     private String pointForSecondArgument;
-    private String informationOfOperation;
     private BigDecimal result;
 
     private void printMessage(String message) {
@@ -79,8 +78,8 @@ public class Calculator {
             printMessage("Мы не можем отобразить список последних операций, возможно вы ещё не ввели ни одного выражения." +
                          "\nВведите в консоль ваше выражение целиком:");
         } else {
-            for (int index = 0; index < listOfLastOperations.size(); index++) {
-                System.out.println(listOfLastOperations.get(index));
+            for (String listOfLastOperation : listOfLastOperations) {
+                System.out.println(listOfLastOperation);
             }
             printMessage("\nВведите в консоль ваше выражение целиком:");
         }
@@ -214,7 +213,7 @@ public class Calculator {
     }
 
     private String concatenationInformationOfOperation() {
-        return informationOfOperation = timeOfOperation() + " : " + firstArgument + operationSymbol + secondArgument + " = " + result;
+        return timeOfOperation() + " : " + firstArgument + operationSymbol + secondArgument + " = " + result;
     }
 
 

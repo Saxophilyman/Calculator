@@ -9,6 +9,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class Calculator {
+    static final int SIZE_OF_MEMORY_OPERATIONS = 10;
     private final static ArrayList<String> listOfAllOperators = new ArrayList<>(Arrays.asList("-", "+", "*", "/", "^"));
     private ArrayList<String> listOfLastOperations = new ArrayList<>(10);
     private StringBuilder firstArgument = new StringBuilder();
@@ -88,7 +89,7 @@ public class Calculator {
     }
 
     private void addOperationToListOfLastOperations(ArrayList<String> listOfLastOperations, String Operation) {
-        if (listOfLastOperations.size() >= 10) {
+        if (listOfLastOperations.size() >= SIZE_OF_MEMORY_OPERATIONS) {
             listOfLastOperations.remove(0);
         }
         listOfLastOperations.add(Operation);

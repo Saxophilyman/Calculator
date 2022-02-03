@@ -9,7 +9,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class Calculator {
-    static final int SIZE_OF_MEMORY_OPERATIONS = 10;
+    //    static final int SIZE_OF_MEMORY_OPERATIONS = 10;
     private final static ArrayList<String> listOfAllOperators = new ArrayList<>(Arrays.asList("-", "+", "*", "/", "^"));
     private ArrayList<String> listOfLastOperations = new ArrayList<>(10);
     private StringBuilder firstArgument = new StringBuilder();
@@ -19,6 +19,8 @@ public class Calculator {
     private String pointForFirstArgument;
     private String pointForSecondArgument;
     private BigDecimal result;
+    private OperationsRepository operationsRepository = new OperationsRepository();
+
 
     private void printMessage(String message) {
         System.out.println(message);
@@ -41,8 +43,6 @@ public class Calculator {
         }
     }
 
-    // если я правильно понял. но жёлтый маркер справа говорит, что return value of the method is never used
-// А как по другому??
     private boolean readConsole() {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         try {
@@ -63,37 +63,37 @@ public class Calculator {
     }
 
 
-    //нихуя не понятны приколы с булеаном и ретёрном
-    //та же return value of the method is never used
     private boolean isUserRequestsMemory(String isReadConsoleTextMemory) {
         if (isReadConsoleTextMemory.equals("memory")) {
             /*???*/
-            return printLastOperations(listOfLastOperations);
+            return operationsRepository.printLastOperations(listOfLastOperations);
+            //printLastOperations(listOfLastOperations);
+
         }
         /*???*/
         return false;
     }
 
-    private boolean printLastOperations(ArrayList<String> listOfLastOperations) {
-        if (listOfLastOperations.isEmpty()) {
-            printMessage("Мы не можем отобразить список последних операций, возможно вы ещё не ввели ни одного выражения." +
-                         "\nВведите в консоль ваше выражение целиком:");
-        } else {
-            for (String listOfLastOperation : listOfLastOperations) {
-                System.out.println(listOfLastOperation);
-            }
-            printMessage("\nВведите в консоль ваше выражение целиком:");
-        }
-        /*???*/
-        return true;
-    }
+//    private boolean printLastOperations(ArrayList<String> listOfLastOperations) {
+//        if (listOfLastOperations.isEmpty()) {
+//            printMessage("Мы не можем отобразить список последних операций, возможно вы ещё не ввели ни одного выражения." +
+//                         "\nВведите в консоль ваше выражение целиком:");
+//        } else {
+//            for (String listOfLastOperation : listOfLastOperations) {
+//                System.out.println(listOfLastOperation);
+//            }
+//            printMessage("\nВведите в консоль ваше выражение целиком:");
+//        }
+//        /*???*/
+//        return true;
+//    }
 
-    private void addOperationToListOfLastOperations(ArrayList<String> listOfLastOperations, String Operation) {
-        if (listOfLastOperations.size() >= SIZE_OF_MEMORY_OPERATIONS) {
-            listOfLastOperations.remove(0);
-        }
-        listOfLastOperations.add(Operation);
-    }
+//    private void addOperationToListOfLastOperations(ArrayList<String> listOfLastOperations, String Operation) {
+//        if (listOfLastOperations.size() >= SIZE_OF_MEMORY_OPERATIONS) {
+//            listOfLastOperations.remove(0);
+//        }
+//        listOfLastOperations.add(Operation);
+//    }
 
     private void checkReadConsoleIsNumber(String readConsoleText) {
         String textSymbol;
@@ -133,8 +133,8 @@ public class Calculator {
             } else {
                 if (textSymbolIsOperation(textSymbol)) {
                     printMessage("У нас что, два символа операции одновременно???\n" +
-                                 "Извините, но мы за последовательное вычисление\n" +
-                                 "Давайте попробуем ещё раз");
+                            "Извините, но мы за последовательное вычисление\n" +
+                            "Давайте попробуем ещё раз");
                     startWorkingCalculator();
                     return;
                 } else if (textSymbolIsInteger(textSymbol)) {
@@ -178,7 +178,7 @@ public class Calculator {
         return symbolOfReadConsole.equals(".");
     }
 
-    private String timeOfOperation() {
+    static String timeOfOperation() {
         Calendar calendar = new GregorianCalendar();
         DateFormat timeOfOperation = new SimpleDateFormat("dd MMM yyy HH:mm"); //не смог найти вариант, где сокращённое название месяца выводится без точки
         return timeOfOperation.format(calendar.getTime());
@@ -206,16 +206,21 @@ public class Calculator {
             if (operationSymbol.equals("^")) {
                 applyExponentiateOperation(numeralFirstArgument, numeralSecondArgument);
             }
-            addOperationToListOfLastOperations(listOfLastOperations, concatenationInformationOfOperation());
+            operationsRepository.addOperationToListOfLastOperations(listOfLastOperations,
+                    operationsRepository.concatenationInformationOfOperation(firstArgument,
+                            operationSymbol,
+                            secondArgument,
+                            result));
+            //           addOperationToListOfLastOperations(listOfLastOperations, concatenationInformationOfOperation());
         } else {
             printMessage("Один из аргументов не введён в консоль. Попробуйте ввести всё выражение целиком:");
             startWorkingCalculator();
         }
     }
 
-    private String concatenationInformationOfOperation() {
-        return timeOfOperation() + " : " + firstArgument + operationSymbol + secondArgument + " = " + result;
-    }
+//    private String concatenationInformationOfOperation() {
+//        return timeOfOperation() + " : " + firstArgument + operationSymbol + secondArgument + " = " + result;
+//    }
 
 
     private boolean checkArgumentIsNotNull(StringBuilder firstArgument, StringBuilder secondArgument) {
@@ -240,7 +245,7 @@ public class Calculator {
     private void applyDivideOperation(BigDecimal numeralFirstArgument, BigDecimal numeralSecondArgument) {
         if (numeralSecondArgument.compareTo(BigDecimal.valueOf(0)) == 0) {
             printMessage("Вспомните, на ноль делить нельзя!" +
-                         "\nПопробуйте делить не на ноль:");
+                    "\nПопробуйте делить не на ноль:");
             startWorkingCalculator();
         }
         result = numeralFirstArgument.divide(numeralSecondArgument, 7, BigDecimal.ROUND_HALF_EVEN);//почему depricate?
@@ -250,12 +255,11 @@ public class Calculator {
     private void applyExponentiateOperation(BigDecimal numeralFirstArgument, BigDecimal numeralSecondArgument) {
         if (!argumentIsInt(secondArgument)) {
             printMessage("Для данной версии калькулятора предусмотрено возведение ТОЛЬКО В НАТУРАЛЬНУЮ степень." +
-                         "\nи ОГРАНИЧЕНО размерами 999 999 999. Попробуйте ещё раз:");
+                    "\nи ОГРАНИЧЕНО размерами 999 999 999. Попробуйте ещё раз:");
             startWorkingCalculator();
         }
         result = numeralFirstArgument.pow(numeralSecondArgument.intValue());
         printMessage("Результат: " + result);
-        //Math.exp( step * Math.log(x));
     }
 
     private boolean argumentIsInt(StringBuilder textArgument) {

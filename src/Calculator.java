@@ -11,7 +11,7 @@ import java.util.GregorianCalendar;
 public class Calculator {
     //    static final int SIZE_OF_MEMORY_OPERATIONS = 10;
     private final static ArrayList<String> listOfAllOperators = new ArrayList<>(Arrays.asList("-", "+", "*", "/", "^"));
-    private ArrayList<String> listOfLastOperations = new ArrayList<>(10);
+//    private ArrayList<String> listOfLastOperations = new ArrayList<>(10);
     private StringBuilder firstArgument = new StringBuilder();
     private StringBuilder secondArgument = new StringBuilder();
     private String readConsole = null;
@@ -66,27 +66,28 @@ public class Calculator {
     private boolean isUserRequestsMemory(String isReadConsoleTextMemory) {
         if (isReadConsoleTextMemory.equals("memory")) {
             /*???*/
-            return operationsRepository.printLastOperations(listOfLastOperations);
-            //printLastOperations(listOfLastOperations);
+            return  printLastOperations(operationsRepository.listOfLastOperations);
+
+            //operationsRepository.printLastOperations(operationsRepository.listOfLastOperations);
 
         }
         /*???*/
         return false;
     }
 
-//    private boolean printLastOperations(ArrayList<String> listOfLastOperations) {
-//        if (listOfLastOperations.isEmpty()) {
-//            printMessage("Мы не можем отобразить список последних операций, возможно вы ещё не ввели ни одного выражения." +
-//                         "\nВведите в консоль ваше выражение целиком:");
-//        } else {
-//            for (String listOfLastOperation : listOfLastOperations) {
-//                System.out.println(listOfLastOperation);
-//            }
-//            printMessage("\nВведите в консоль ваше выражение целиком:");
-//        }
-//        /*???*/
-//        return true;
-//    }
+    private boolean printLastOperations(ArrayList<String> listOfLastOperations) {
+        if (listOfLastOperations.isEmpty()) {
+            printMessage("Мы не можем отобразить список последних операций, возможно вы ещё не ввели ни одного выражения." +
+                         "\nВведите в консоль ваше выражение целиком:");
+        } else {
+            for (String listOfLastOperation : listOfLastOperations) {
+                System.out.println(listOfLastOperation);
+            }
+            printMessage("\nВведите в консоль ваше выражение целиком:");
+        }
+        /*???*/
+        return true;
+    }
 
 //    private void addOperationToListOfLastOperations(ArrayList<String> listOfLastOperations, String Operation) {
 //        if (listOfLastOperations.size() >= SIZE_OF_MEMORY_OPERATIONS) {
@@ -178,9 +179,9 @@ public class Calculator {
         return symbolOfReadConsole.equals(".");
     }
 
-    static String timeOfOperation() {
+    static String setTimeOfOperation() {
         Calendar calendar = new GregorianCalendar();
-        DateFormat timeOfOperation = new SimpleDateFormat("dd MMM yyy HH:mm"); //не смог найти вариант, где сокращённое название месяца выводится без точки
+        DateFormat timeOfOperation = new SimpleDateFormat("dd MMM yyy HH:mm");
         return timeOfOperation.format(calendar.getTime());
     }
 
@@ -206,7 +207,7 @@ public class Calculator {
             if (operationSymbol.equals("^")) {
                 applyExponentiateOperation(numeralFirstArgument, numeralSecondArgument);
             }
-            operationsRepository.addOperationToListOfLastOperations(listOfLastOperations,
+            operationsRepository.addOperationToListOfLastOperations(operationsRepository.listOfLastOperations,
                     operationsRepository.concatenationInformationOfOperation(firstArgument,
                             operationSymbol,
                             secondArgument,

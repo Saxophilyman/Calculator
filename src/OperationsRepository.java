@@ -2,41 +2,18 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 
 public class OperationsRepository {
-    public ArrayList<String> listOfLastOperations = new ArrayList<>(10);
+    private ArrayList<String> listOfLastOperations = new ArrayList<>(10);
     static final int SIZE_OF_MEMORY_OPERATIONS = 10;
 
-    private void printMessage(String message) {
-        System.out.println(message);
-    }//
-//    private boolean isUserRequestsMemory(String isReadConsoleTextMemory) {
-//        if (isReadConsoleTextMemory.equals("memory")) {
-//            /*???*/
-//            return printLastOperations(listOfLastOperations);
-//        }
-//        /*???*/
-//        return false;
-//    }
-//
-//    public boolean printLastOperations(ArrayList<String> listOfLastOperations) {
-//        if (listOfLastOperations.isEmpty()) {
-//            printMessage("Мы не можем отобразить список последних операций, возможно вы ещё не ввели ни одного выражения." +
-//                    "\nВведите в консоль ваше выражение целиком:");
-//        } else {
-//            for (String listOfLastOperation : listOfLastOperations) {
-//                System.out.println(listOfLastOperation);
-//            }
-//            printMessage("\nВведите в консоль ваше выражение целиком:");
-//        }
-//        /*???*/
-//        return true;
-//    }
+    public ArrayList<String> getListOfLastOperations() {
+        return listOfLastOperations;
+    }
 
-
-    public void addOperationToListOfLastOperations(ArrayList<String> listOfLastOperations, String Operation) {
+    public void addOperationToListOfLastOperations(ArrayList<String> listOfLastOperations, StringBuilder firstArgument, String operationSymbol, StringBuilder secondArgument, BigDecimal result) {
         if (listOfLastOperations.size() >= SIZE_OF_MEMORY_OPERATIONS) {
             listOfLastOperations.remove(0);
         }
-        listOfLastOperations.add(Operation);
+        listOfLastOperations.add(concatenationInformationOfOperation(firstArgument, operationSymbol, secondArgument, result));
     }
 
     public String concatenationInformationOfOperation(StringBuilder firstArgument, String operationSymbol, StringBuilder secondArgument, BigDecimal result) {

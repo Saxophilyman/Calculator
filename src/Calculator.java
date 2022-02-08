@@ -9,9 +9,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class Calculator {
-    //    static final int SIZE_OF_MEMORY_OPERATIONS = 10;
     private final static ArrayList<String> listOfAllOperators = new ArrayList<>(Arrays.asList("-", "+", "*", "/", "^"));
-//    private ArrayList<String> listOfLastOperations = new ArrayList<>(10);
     private StringBuilder firstArgument = new StringBuilder();
     private StringBuilder secondArgument = new StringBuilder();
     private String readConsole = null;
@@ -62,16 +60,10 @@ public class Calculator {
         return true;
     }
 
-
     private boolean isUserRequestsMemory(String isReadConsoleTextMemory) {
         if (isReadConsoleTextMemory.equals("memory")) {
-            /*???*/
-            return  printLastOperations(operationsRepository.listOfLastOperations);
-
-            //operationsRepository.printLastOperations(operationsRepository.listOfLastOperations);
-
+            return printLastOperations(operationsRepository.getListOfLastOperations());
         }
-        /*???*/
         return false;
     }
 
@@ -85,23 +77,14 @@ public class Calculator {
             }
             printMessage("\nВведите в консоль ваше выражение целиком:");
         }
-        /*???*/
         return true;
     }
-
-//    private void addOperationToListOfLastOperations(ArrayList<String> listOfLastOperations, String Operation) {
-//        if (listOfLastOperations.size() >= SIZE_OF_MEMORY_OPERATIONS) {
-//            listOfLastOperations.remove(0);
-//        }
-//        listOfLastOperations.add(Operation);
-//    }
 
     private void checkReadConsoleIsNumber(String readConsoleText) {
         String textSymbol;
         readConsoleText = readConsoleText.replaceAll(" ", ""); //убрать пробелы в строке
         for (int index = 0; index < readConsoleText.length(); index++) {
             textSymbol = String.valueOf(readConsoleText.charAt(index));
-            //возможно стоит прописать отсечение варианта, где первый символ является операцией
             if (textSymbolIsOperation(String.valueOf(readConsoleText.charAt(0)))) {
                 printMessage("Извините, возможно вы забыли ввести первый аргумент, попробуйте ещё раз:");
                 startWorkingCalculator();
@@ -134,8 +117,8 @@ public class Calculator {
             } else {
                 if (textSymbolIsOperation(textSymbol)) {
                     printMessage("У нас что, два символа операции одновременно???\n" +
-                            "Извините, но мы за последовательное вычисление\n" +
-                            "Давайте попробуем ещё раз");
+                                 "Извините, но мы за последовательное вычисление\n" +
+                                 "Давайте попробуем ещё раз");
                     startWorkingCalculator();
                     return;
                 } else if (textSymbolIsInteger(textSymbol)) {
@@ -191,7 +174,6 @@ public class Calculator {
             BigDecimal numeralFirstArgument = new BigDecimal(firstArgument.toString());
             BigDecimal numeralSecondArgument = new BigDecimal(secondArgument.toString());
 
-
             if (operationSymbol.equals("-")) {
                 applySubtractOperation(numeralFirstArgument, numeralSecondArgument);
             }
@@ -207,22 +189,13 @@ public class Calculator {
             if (operationSymbol.equals("^")) {
                 applyExponentiateOperation(numeralFirstArgument, numeralSecondArgument);
             }
-            operationsRepository.addOperationToListOfLastOperations(operationsRepository.listOfLastOperations,
-                    operationsRepository.concatenationInformationOfOperation(firstArgument,
-                            operationSymbol,
-                            secondArgument,
-                            result));
-            //           addOperationToListOfLastOperations(listOfLastOperations, concatenationInformationOfOperation());
+            operationsRepository.addOperationToListOfLastOperations(operationsRepository.getListOfLastOperations(), firstArgument, operationSymbol,
+                    secondArgument, result);
         } else {
             printMessage("Один из аргументов не введён в консоль. Попробуйте ввести всё выражение целиком:");
             startWorkingCalculator();
         }
     }
-
-//    private String concatenationInformationOfOperation() {
-//        return timeOfOperation() + " : " + firstArgument + operationSymbol + secondArgument + " = " + result;
-//    }
-
 
     private boolean checkArgumentIsNotNull(StringBuilder firstArgument, StringBuilder secondArgument) {
         return firstArgument.length() != 0 && !secondArgument.toString().isEmpty();
@@ -246,7 +219,7 @@ public class Calculator {
     private void applyDivideOperation(BigDecimal numeralFirstArgument, BigDecimal numeralSecondArgument) {
         if (numeralSecondArgument.compareTo(BigDecimal.valueOf(0)) == 0) {
             printMessage("Вспомните, на ноль делить нельзя!" +
-                    "\nПопробуйте делить не на ноль:");
+                         "\nПопробуйте делить не на ноль:");
             startWorkingCalculator();
         }
         result = numeralFirstArgument.divide(numeralSecondArgument, 7, BigDecimal.ROUND_HALF_EVEN);//почему depricate?
@@ -256,7 +229,7 @@ public class Calculator {
     private void applyExponentiateOperation(BigDecimal numeralFirstArgument, BigDecimal numeralSecondArgument) {
         if (!argumentIsInt(secondArgument)) {
             printMessage("Для данной версии калькулятора предусмотрено возведение ТОЛЬКО В НАТУРАЛЬНУЮ степень." +
-                    "\nи ОГРАНИЧЕНО размерами 999 999 999. Попробуйте ещё раз:");
+                         "\nи ОГРАНИЧЕНО размерами 999 999 999. Попробуйте ещё раз:");
             startWorkingCalculator();
         }
         result = numeralFirstArgument.pow(numeralSecondArgument.intValue());

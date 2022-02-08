@@ -189,7 +189,7 @@ public class Calculator {
             if (operationSymbol.equals("^")) {
                 applyExponentiateOperation(numeralFirstArgument, numeralSecondArgument);
             }
-            operationsRepository.addOperationToListOfLastOperations(operationsRepository.getListOfLastOperations(), firstArgument, operationSymbol,
+            operationsRepository.addOperationToListOfLastOperations(firstArgument, operationSymbol,
                     secondArgument, result);
         } else {
             printMessage("Один из аргументов не введён в консоль. Попробуйте ввести всё выражение целиком:");

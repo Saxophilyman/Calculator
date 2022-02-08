@@ -9,7 +9,7 @@ public class OperationsRepository {
         return listOfLastOperations;
     }
 
-    public void addOperationToListOfLastOperations(ArrayList<String> listOfLastOperations, StringBuilder firstArgument, String operationSymbol, StringBuilder secondArgument, BigDecimal result) {
+    public void addOperationToListOfLastOperations(StringBuilder firstArgument, String operationSymbol, StringBuilder secondArgument, BigDecimal result) {
         if (listOfLastOperations.size() >= SIZE_OF_MEMORY_OPERATIONS) {
             listOfLastOperations.remove(0);
         }

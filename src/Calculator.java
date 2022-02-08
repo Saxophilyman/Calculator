@@ -158,6 +158,7 @@ public class Calculator {
         return false;
     }
 
+
     private boolean textSymbolIsPoint(String symbolOfReadConsole) {
         return symbolOfReadConsole.equals(".");
     }
